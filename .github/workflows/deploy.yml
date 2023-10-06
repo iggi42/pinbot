@@ -1,0 +1,21 @@
+name: Deploy
+on:
+  push:
+    branches:
+      - master
+jobs:
+  deploy-to-test:
+    name: Deploy to Test
+    runs-on: ubuntu-latest
+    environment: Test
+    env:
+      DIGITALOCEAN_ACCESS_TOKEN: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+      APP_NAME: ${{ env.PINBOT_APPLICATION_NAME }}
+      APP_VERSION: todo
+      PINBOT_APPLICATION_ID: ${{ secrets.PINBOT_APPLICATION_ID }}
+      PINBOT_TOKEN: ${{ secrets.PINBOT_TOKEN }}
+    steps:
+    - name: Update deployment file
+      run: envsubst < $GITHUB_WORKSPACE/.github/workflows/deploy/pinbot-deployment.yml >> $GITHUB_WORKSPACE/deployment.yml
+    - name: Verify deployment
+      run: cat $GITHUB_WORKSPACE/deployment.yml
