@@ -18,3 +18,13 @@ jobs:
       run: envsubst < $GITHUB_WORKSPACE/.github/workflows/deploy/pinbot-deployment.yml >> $GITHUB_WORKSPACE/deployment.yml
     - name: Verify deployment
       run: cat $GITHUB_WORKSPACE/deployment.yml
+    - name: Install doctl
+      uses: digitalocean/action-doctl@v2
+      with:
+        token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+    - name: Save DigitalOcean kubeconfig with short-lived credentials
+      run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 ${{ secrets.DIGITALOCEAN_CLUSTER_ID }}
+    - name: Deploy to DigitalOcean Kubernetes
+      run: kubectl apply -f $GITHUB_WORKSPACE/deployment.yml
+    - name: Verify deployment
+      run: kubectl rollout status deployment/${{ vars.PINBOT_APPLICATION_NAME }}
