@@ -16,6 +16,6 @@ jobs:
       PINBOT_TOKEN: ${{ secrets.PINBOT_TOKEN }}
     steps:
     - name: Update deployment file
-      run: envsubst < $GITHUB_WORKSPACE/.github/workflows/deploy/pinbot-deployment.yml >> $GITHUB_WORKSPACE/deployment.yml
+      run: envsubst < ./.github/workflows/deploy/pinbot-deployment.yml >> ./deployment.yml
     - name: Verify deployment
-      run: cat $GITHUB_WORKSPACE/deployment.yml
+      run: cat ./deployment.yml
