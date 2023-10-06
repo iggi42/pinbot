@@ -1,17 +1,15 @@
 name: Deploy
 on:
-  push:
-    branches:
-      - master
+  release:
+    types: [ published ]
 jobs:
   deploy-to-test:
     name: Deploy to Test
     runs-on: ubuntu-latest
     environment: Test
     env:
-      DIGITALOCEAN_ACCESS_TOKEN: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
       APP_NAME: ${{ vars.PINBOT_APPLICATION_NAME }}
-      APP_VERSION: todo
+      APP_VERSION: ${{ github.ref_name }}
       PINBOT_APPLICATION_ID: ${{ secrets.PINBOT_APPLICATION_ID }}
       PINBOT_TOKEN: ${{ secrets.PINBOT_TOKEN }}
     steps:
