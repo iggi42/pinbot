@@ -3,10 +3,13 @@ on:
   release:
     types: [ released ]
 jobs:
-  deploy-to-test:
-    name: Deploy to Test
+  deploy:
+    strategy:
+      matrix:
+        environment: [Test, Production]
+    name: Deploy to ${{ matrix.environment }}
     runs-on: ubuntu-latest
-    environment: Test
+    environment: ${{ matrix.environment }}
     env:
       APP_NAME: ${{ vars.PINBOT_APPLICATION_NAME }}
       APP_VERSION: ${{ github.ref_name }}
