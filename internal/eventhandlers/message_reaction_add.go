@@ -21,10 +21,13 @@ func MessageReactionAdd(log *logrus.Entry) func(s *discordgo.Session, e *discord
 			return
 		}
 
-		commandhandlers.PinMessageCommandHandler(&commandhandlers.PinMessageCommand{
-			GuildID:  e.GuildID,
-			Message:  m,
-			PinnedBy: e.Member.User,
-		}, s, log)
+    for _, value := range m.Reactions {
+      if value.Emoji.Name == "📌" && value.Count > 2 {
+        commandhandlers.PinMessageCommandHandler(&commandhandlers.PinMessageCommand{
+          GuildID:  e.GuildID,
+          Message:  m,
+          PinnedBy: e.Member.User,
+        }, s, log)
+      }
 	}
 }
